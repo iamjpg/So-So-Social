@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>jQuery News Feed</title>
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="so.so.social.feed.compressed.js" type="text/javascript" charset="utf-8"></script>
+	<script src="so.so.social.init.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		$(document).ready(function() {
+			$("#activityFeed").soSoSocial();
+		});
+	</script>
+</head>
+<body>
+	<div id="container">
+		<div id="lc">
+			<h1>So So Social Plug-In.<br />Powered by jQuery and YQL.</h1>
+			<h2>Plug-In Intro</h2>
+			<p>The So So Social plug-in uses jQuery and YQL (Yahoo Query Language) to gather RSS feeds from your various social networks and sorts them into an "activity feed".  Basically it creates a news feed out of your social networking activity.</p>
+			<h2>Plug-In Features</h2>
+			<ul>
+				<li>No server side proxy needed!  Thanks to YQL there is no need for any PHP, ASP, CFM, or whatever to Curl the RSS feeds.</li>
+				<li>Super easy to get set up and working.</li>
+				<li>Very light foot print.</li>
+			</ul>
+			<h2>Services Supported "Out of the Box"</h2>
+			<ul>
+				<li>Twitter</li>
+				<li>Facebook</li>
+				<li>Wordpress</li>
+				<li>Tumblr</li>
+				<li>Last.FM</li>
+				<li>Delicious</li>
+				<li>Flickr</li>
+			</ul>
+			<p>I felt this was a sensible set of service to include with the plug-in.  If there is a service not represented like posterous or virb or youtube...the code is open...extend it.</p>
+		</div>
+		<div id="rc">
+			<h2>News Feed Example</h2>
+			<div id="activityFeed"><div style="text-align: center;"><br /><br /><img src="ajax.gif" width="32" height="32" alt="Ajax" align="center"></div></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</body>
+</html>

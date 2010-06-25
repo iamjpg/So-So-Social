@@ -1,0 +1,60 @@
+body {
+	font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	background: #000 url('bg.jpg') no-repeat fixed top center;
+	color: #fff;
+}
+h1 {
+	font-size: 48px;
+	font-weight: 100;
+	text-align: left;
+	color: #fcd6ff;
+}
+h2 {
+	font-size: 24px;
+	font-weight: 100;
+	color: #bcfffb;
+}
+p {
+	line-height: 150%;
+}
+a {
+	color: #d6ffff;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+#activityFeed ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+#activityFeed ul li {
+	background-color: #232323 !important;
+	background-position: 10px center !important;
+	background-repeat: no-repeat !important;
+	margin-bottom: 1px !important;
+	padding: 5px 5px 5px 34px !important;
+	font-size: 11px;
+}
+#container {
+	width: 940px;
+	margin: auto;
+}
+
+#lc {
+	float: left;
+	width: 580px;
+}
+#rc {
+	float: right;
+	width: 320px;
+}
+.clear {
+	clear: both;
+	display: block;
+	height: 0px;
+	margin: 0;
+	padding: 0;
+}

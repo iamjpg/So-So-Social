@@ -1,0 +1,46 @@
+/*
+	* Developed by J.P. Given
+	* http://johnpatrickgiven.com
+	
+	******************************************************************************************************
+	* NOTE: DON'T DELETE ANY VARIABLES FROM THIS PAGE.  IF YOU DON'T USE A SERVICE SIMPLY LEAVE IT BLANK.*
+	******************************************************************************************************
+	
+	* This file is required for the plug in to work.  Do not erase any of the Javascript variables on this page.
+	* If you don't use one of the services below simply leave the value blank ('').
+	
+	* NOTE: all RSS feed links need to be fully qualified URLs.  ie http://...
+*/
+
+// Twitter RSS.  My Twitter RSS feed is in here as an example.
+var TWITTER_RSS = 'http://twitter.com/statuses/user_timeline/35092196.rss';
+
+// LastFM RSS.
+var LASTFM_RSS = '';
+
+// Facebook RSS.
+// How do you get it?  It's annoying but here's how.
+// After logging in click the link to your profile.
+// Scroll down the page and on the left hand side there is a section called "Links".
+// Click "See All"
+// On the right you'll see a link to the RSS FEED.  Click it.
+// Grab that URL.
+var FACEBOOK_RSS = '';
+
+// Flickr RSS.
+var FLICKR_RSS = '';
+
+// Delicious RSS.
+var DELICIOUS_RSS = '';
+
+//Tumblr RSS.
+var TUMBLR_RSS = '';
+
+//Wordpress RSS.
+var WORDPRESS_RSS = '';
+
+// How many to display.  Recommend no more than 25 since RSS only goes back so far.  0 = show all.
+var LIMIT = 10;
+
+
+
