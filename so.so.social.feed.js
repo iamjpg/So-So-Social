@@ -257,7 +257,7 @@ var COUNT = 0;
 // Print the array! 
 function print_array(obj) {
 	
-	if (LIMIT == 0) {
+	if ( (LIMIT == 0) || (ACTIVITY_ARRAY.length < LIMIT) ) {
 		LIMIT = ACTIVITY_ARRAY.length;
 	}
 	
