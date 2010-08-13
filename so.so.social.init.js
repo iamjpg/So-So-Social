@@ -13,10 +13,10 @@
 */
 
 // Twitter RSS.  My Twitter RSS feed is in here as an example.
-var TWITTER_RSS = 'http://twitter.com/statuses/user_timeline/35092196.rss';
+sss.TWITTER_RSS = 'http://twitter.com/statuses/user_timeline/35092196.rss';
 
 // LastFM RSS.
-var LASTFM_RSS = '';
+sss.LASTFM_RSS = '';
 
 // Facebook RSS.
 // How do you get it?  It's annoying but here's how.
@@ -25,22 +25,22 @@ var LASTFM_RSS = '';
 // Click "See All"
 // On the right you'll see a link to the RSS FEED.  Click it.
 // Grab that URL.
-var FACEBOOK_RSS = '';
+sss.FACEBOOK_RSS = '';
 
 // Flickr RSS.
-var FLICKR_RSS = '';
+sss.FLICKR_RSS = '';
 
 // Delicious RSS.
-var DELICIOUS_RSS = '';
+sss.DELICIOUS_RSS = '';
 
 //Tumblr RSS.
-var TUMBLR_RSS = '';
+sss.TUMBLR_RSS = '';
 
 //Wordpress RSS.
-var WORDPRESS_RSS = '';
+sss.WORDPRESS_RSS = '';
 
 // How many to display.  Recommend no more than 25 since RSS only goes back so far.  0 = show all.
-var LIMIT = 10;
+sss.LIMIT = 10;
 
 
 

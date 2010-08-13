@@ -6,21 +6,23 @@
 	* Useage: anyone so long as credit is left alone
 ******************************************************/
 
-var ACTIVITY_ARRAY = new Array();
-var TWITTER_FINISHED = 0;
-var FACEBOOK_FINISHED = 0;
-var FLICKR_FINISHED = 0;
-var LASTFM_FINISHED = 0;
-var DELICIOUS_FINISHED = 0;
-var TUMBLR_FINISHED = 0;
-var WORDPRESS_FINISHED = 0;
-var CONTAINER = null;
-var COUNT = 0;
+var sss = {};
+
+sss.ACTIVITY_ARRAY = new Array();
+sss.TWITTER_FINISHED = 0;
+sss.FACEBOOK_FINISHED = 0;
+sss.FLICKR_FINISHED = 0;
+sss.LASTFM_FINISHED = 0;
+sss.DELICIOUS_FINISHED = 0;
+sss.TUMBLR_FINISHED = 0;
+sss.WORDPRESS_FINISHED = 0;
+sss.CONTAINER = null;
+sss.COUNT = 0;
 
 (function($) {
 	$.fn.soSoSocial = function(callback) {
 		
-		CONTAINER = $(this);
+		sss.CONTAINER = $(this);
 		
 		
 		/************************************************************************************
@@ -30,8 +32,8 @@ var COUNT = 0;
 		
 		
 		// Twitter
-		if (TWITTER_RSS != "") {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(TWITTER_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.TWITTER_RSS != "") {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.TWITTER_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -52,24 +54,24 @@ var COUNT = 0;
 					status = status.replace(/\B@([_a-z0-9]+):/ig, "");
 					
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4057/4494661441_c03e3fe766_o.png) no-repeat left center;">' + status + ' <a href="' + link + '" target="_blank">#</a>';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4057/4494661441_c03e3fe766_o.png) no-repeat left center;">' + status + ' <a href="' + link + '" target="_blank">#</a>';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 				
-				TWITTER_FINISHED = 1;
+				sss.TWITTER_FINISHED = 1;
 				
 			});
 			
 		} else { //if not on twitter set it to done.
-			TWITTER_FINISHED = 1;
+			sss.TWITTER_FINISHED = 1;
 		}
 		
 		//LastFM
-		if (LASTFM_RSS != '') {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(LASTFM_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.LASTFM_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.LASTFM_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -80,23 +82,23 @@ var COUNT = 0;
 					pubDate = pubDate.replace(/\,/g,'');
 					
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4007/4495300744_5c8afb3149_o.png) no-repeat left center;">Listened to <a href="' + link + '" target="_blank">' + title + '</a>';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4007/4495300744_5c8afb3149_o.png) no-repeat left center;">Listened to <a href="' + link + '" target="_blank">' + title + '</a>';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 				
-				LASTFM_FINISHED = 1;
+				sss.LASTFM_FINISHED = 1;
 				
 			});
 		
 		} else {
-			LASTFM_FINISHED = 1;
+			sss.LASTFM_FINISHED = 1;
 		}
 		
-		if (FACEBOOK_RSS != '') {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(FACEBOOK_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.FACEBOOK_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.FACEBOOK_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -107,23 +109,23 @@ var COUNT = 0;
 					pubDate = pubDate.replace(/\,/g,'');
 					
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4022/4494661487_35b0167583_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a>';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4022/4494661487_35b0167583_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a>';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 				
-				FACEBOOK_FINISHED = 1;
+				sss.FACEBOOK_FINISHED = 1;
 				
 			});
 		} else {
-			FACEBOOK_FINISHED = 1;
+			sss.FACEBOOK_FINISHED = 1;
 		}
 		
 		//Flickr
-		if (FLICKR_RSS != '') {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(FLICKR_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.FLICKR_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.FLICKR_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -137,23 +139,23 @@ var COUNT = 0;
 					title = title[0];
 					
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm3.static.flickr.com/2727/4494661413_0228be5f32_o.png) no-repeat left center;">Uploaded <a href="' + link + '" target="_blank">' + title + '</a>';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm3.static.flickr.com/2727/4494661413_0228be5f32_o.png) no-repeat left center;">Uploaded <a href="' + link + '" target="_blank">' + title + '</a>';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 				
-				FLICKR_FINISHED = 1;
+				sss.FLICKR_FINISHED = 1;
 				
 			});
 		} else {
-			FLICKR_FINISHED = 1;
+			sss.FLICKR_FINISHED = 1;
 		}
 		
 		//Delicious
-		if (DELICIOUS_RSS != '') {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(DELICIOUS_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.DELICIOUS_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.DELICIOUS_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -164,18 +166,18 @@ var COUNT = 0;
 					pubDate = pubDate.replace(/\,/g,'');
 					
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4064/4495300640_2a7cbbb922_o.png) no-repeat left center;">Saved <a href="' + link + '" target="_blank">' + title + '</a>.';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4064/4495300640_2a7cbbb922_o.png) no-repeat left center;">Saved <a href="' + link + '" target="_blank">' + title + '</a>.';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 				
-				DELICIOUS_FINISHED = 1;
+				sss.DELICIOUS_FINISHED = 1;
 				
 			});
 		} else {
-			DELICIOUS_FINISHED = 1;
+			sss.DELICIOUS_FINISHED = 1;
 		}
 		
 		print_array($(this));
@@ -185,8 +187,8 @@ var COUNT = 0;
 		}
 		
 		//Tumblr
-		if (TUMBLR_RSS != '') {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(TUMBLR_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.TUMBLR_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.TUMBLR_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -197,18 +199,18 @@ var COUNT = 0;
 					pubDate = pubDate.replace(/\,/g,'');
 
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4022/4494661551_3d68321873_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a>.';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4022/4494661551_3d68321873_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a>.';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 
-				TUMBLR_FINISHED = 1;
+				sss.TUMBLR_FINISHED = 1;
 
 			});
 		} else {
-			TUMBLR_FINISHED = 1;
+			sss.TUMBLR_FINISHED = 1;
 		}
 
 			print_array($(this));
@@ -219,8 +221,8 @@ var COUNT = 0;
 		
 		
 		//Wordpress
-		if (WORDPRESS_RSS != '') {
-			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(WORDPRESS_RSS)+"%22&format=json&callback=?", function(d) {
+		if (sss.WORDPRESS_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.WORDPRESS_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
@@ -231,18 +233,18 @@ var COUNT = 0;
 					pubDate = pubDate.replace(/\,/g,'');
 
 					//append to the div
-					ACTIVITY_ARRAY[COUNT] = new Array();
-					ACTIVITY_ARRAY[COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Tumblr.';
-					ACTIVITY_ARRAY[COUNT][1] = relative_time(pubDate);
-					ACTIVITY_ARRAY[COUNT][2] = get_delta(pubDate);
-					COUNT++;
+					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Tumblr.';
+					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+					sss.COUNT++;
 				});
 
-				WORDPRESS_FINISHED = 1;
+				sss.WORDPRESS_FINISHED = 1;
 
 			});
 		} else {
-			WORDPRESS_FINISHED = 1;
+			sss.WORDPRESS_FINISHED = 1;
 		}
 
 			print_array($(this));
@@ -257,21 +259,21 @@ var COUNT = 0;
 // Print the array! 
 function print_array(obj) {
 	
-	if ( (LIMIT == 0) || (ACTIVITY_ARRAY.length < LIMIT) ) {
-		LIMIT = ACTIVITY_ARRAY.length;
+	if ( (sss.LIMIT == 0) || (sss.ACTIVITY_ARRAY.length < sss.LIMIT) ) {
+		sss.LIMIT = sss.ACTIVITY_ARRAY.length;
 	}
 	
-	if ((FLICKR_FINISHED == 1) && (TWITTER_FINISHED == 1) && (FACEBOOK_FINISHED == 1) && (LASTFM_FINISHED == 1) && (DELICIOUS_FINISHED == 1) && (TUMBLR_FINISHED == 1) && (WORDPRESS_FINISHED == 1)) {
+	if ((sss.FLICKR_FINISHED == 1) && (sss.TWITTER_FINISHED == 1) && (sss.FACEBOOK_FINISHED == 1) && (sss.LASTFM_FINISHED == 1) && (sss.DELICIOUS_FINISHED == 1) && (sss.TUMBLR_FINISHED == 1) && (sss.WORDPRESS_FINISHED == 1)) {
 		
-		CONTAINER.html("");
+		sss.CONTAINER.html("");
 		
-		ACTIVITY_ARRAY.sort(by(2,1));
+		sss.ACTIVITY_ARRAY.sort(by(2,1));
 		var html = '<ul>';
-		for (j = 0; j < LIMIT; j++) {
-			html += ACTIVITY_ARRAY[j][0] + ' (' + ACTIVITY_ARRAY[j][1] + ')</li>';
+		for (j = 0; j < sss.LIMIT; j++) {
+			html += sss.ACTIVITY_ARRAY[j][0] + ' (' + sss.ACTIVITY_ARRAY[j][1] + ')</li>';
 		}
 		html += '</ul>';
-		CONTAINER.append(html);
+		sss.CONTAINER.append(html);
 	} else {
 		setTimeout("print_array()", 1000);
 	}
