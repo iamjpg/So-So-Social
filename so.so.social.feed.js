@@ -259,11 +259,11 @@ sss.COUNT = 0;
 // Print the array! 
 function print_array(obj) {
 	
-	if ( (sss.LIMIT == 0) || (sss.ACTIVITY_ARRAY.length < sss.LIMIT) ) {
-		sss.LIMIT = sss.ACTIVITY_ARRAY.length;
-	}
-	
 	if ((sss.FLICKR_FINISHED == 1) && (sss.TWITTER_FINISHED == 1) && (sss.FACEBOOK_FINISHED == 1) && (sss.LASTFM_FINISHED == 1) && (sss.DELICIOUS_FINISHED == 1) && (sss.TUMBLR_FINISHED == 1) && (sss.WORDPRESS_FINISHED == 1)) {
+		
+		if ( (sss.LIMIT == 0) || (sss.ACTIVITY_ARRAY.length < sss.LIMIT) ) {
+			sss.LIMIT = sss.ACTIVITY_ARRAY.length;
+		}
 		
 		sss.CONTAINER.html("");
 		
@@ -286,7 +286,12 @@ function get_delta(time_value) {
 	var parsed_date = Date.parse(time_value);
 	var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
 	var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
-	delta = delta + (relative_to.getTimezoneOffset() * 60);
+	if (values[5] == "+0000") {
+		delta = delta + (relative_to.getTimezoneOffset() * 60);
+	} else {
+		delta = delta + relative_to.getTimezoneOffset();
+	}
+	
 	
 	return delta;
 }
