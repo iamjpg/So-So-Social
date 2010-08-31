@@ -39,6 +39,9 @@ sss.TUMBLR_RSS = '';
 //Wordpress RSS.
 sss.WORDPRESS_RSS = '';
 
+//Wordpress RSS.
+sss.POSTEROUS_RSS = 'http://iamjpg.posterous.com/rss.xml';
+
 // How many to display.  Recommend no more than 25 since RSS only goes back so far.  0 = show all.
 sss.LIMIT = 5;
 

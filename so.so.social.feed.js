@@ -16,6 +16,7 @@ sss.LASTFM_FINISHED = 0;
 sss.DELICIOUS_FINISHED = 0;
 sss.TUMBLR_FINISHED = 0;
 sss.WORDPRESS_FINISHED = 0;
+sss.POSTEROUS_FINISHED = 0;
 sss.CONTAINER = null;
 sss.COUNT = 0;
 
@@ -261,32 +262,71 @@ sss.COUNT = 0;
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.WORDPRESS_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
 				if (d.query.results.rss) {
-					
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Wordpress.';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
+					});
+
+					sss.WORDPRESS_FINISHED = 1;
 				} else {
-					console.log('SoSoSocial ERROR: Facebook feed seems to be down.');
-					sss.FACEBOOK_FINISHED = 1;
+					console.log('SoSoSocial ERROR: Wordpress feed seems to be down.');
+					sss.WORDPRESS_FINISHED = 1;
 				}
-				$(d.query.results.rss.channel.item).each(function() {
-					//if set up to be infinite or the limit is not reached, keep grabbing items
-					var title = this.title;
-					var link = this.link;
-					var description = this.description;
-					var pubDate = this.pubDate;
-					pubDate = pubDate.replace(/\,/g,'');
-
-					//append to the div
-					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Wordpress.';
-					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
-					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
-					sss.COUNT++;
-				});
-
-				sss.WORDPRESS_FINISHED = 1;
+				
 
 			});
 		} else {
 			sss.WORDPRESS_FINISHED = 1;
+		}
+
+			print_array($(this));
+
+		if (typeof callback == 'function') { // make sure the callback is a function
+			callback.call(this); // brings the scope to the callback
+		}
+		
+		//Posterous
+		if (sss.POSTEROUS_RSS != '') {
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.POSTEROUS_RSS)+"%22&format=json&callback=?", function(d) {
+				//grab ever rss item from the json result request
+				if (d.query.results.rss) {
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4152/4946030629_65fece60f2_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Posterous.';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
+					});
+
+					sss.POSTEROUS_FINISHED = 1;
+				} else {
+					console.log('SoSoSocial ERROR: Wordpress feed seems to be down.');
+					sss.POSTEROUS_FINISHED = 1;
+				}
+				
+
+			});
+		} else {
+			sss.POSTEROUS_FINISHED = 1;
 		}
 
 			print_array($(this));
