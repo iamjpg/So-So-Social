@@ -35,33 +35,39 @@ sss.COUNT = 0;
 		if (sss.TWITTER_RSS != "") {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.TWITTER_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
-				$(d.query.results.rss.channel.item).each(function() {
-					//if set up to be infinite or the limit is not reached, keep grabbing items
-					var title = this.title;
-					var link = this.link;
-					var description = this.description;
-					var pubDate = this.pubDate;
-					pubDate = pubDate.replace(/\,/g,'');
-					
-					var status = title.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
-						return '<a href="'+url+'">'+url+'</a>';
-					}).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
-						return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+				if (d.query.results.rss) {
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+
+						var status = title.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
+							return '<a href="'+url+'">'+url+'</a>';
+						}).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
+							return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+						});
+
+						//Remove twitter username from front of status.
+						status = '@' + status;
+						status = status.replace(/\B@([_a-z0-9]+):/ig, "");
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4057/4494661441_c03e3fe766_o.png) no-repeat left center;">' + status + ' <a href="' + link + '" target="_blank">#</a>';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
 					});
-					
-					//Remove twitter username from front of status.
-					status = '@' + status;
-					status = status.replace(/\B@([_a-z0-9]+):/ig, "");
-					
-					//append to the div
-					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4057/4494661441_c03e3fe766_o.png) no-repeat left center;">' + status + ' <a href="' + link + '" target="_blank">#</a>';
-					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
-					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
-					sss.COUNT++;
-				});
+
+					sss.TWITTER_FINISHED = 1;
+				} else {
+					console.log('SoSoSocial ERROR: Twitter feed seems to be down.');
+					sss.TWITTER_FINISHED = 1;
+				}
 				
-				sss.TWITTER_FINISHED = 1;
 				
 			});
 			
@@ -73,23 +79,29 @@ sss.COUNT = 0;
 		if (sss.LASTFM_RSS != '') {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.LASTFM_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
-				$(d.query.results.rss.channel.item).each(function() {
-					//if set up to be infinite or the limit is not reached, keep grabbing items
-					var title = this.title;
-					var link = this.link;
-					var description = this.description;
-					var pubDate = this.pubDate;
-					pubDate = pubDate.replace(/\,/g,'');
-					
-					//append to the div
-					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4007/4495300744_5c8afb3149_o.png) no-repeat left center;">Listened to <a href="' + link + '" target="_blank">' + title + '</a>';
-					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
-					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
-					sss.COUNT++;
-				});
+				if (d.query.results.rss) {
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4007/4495300744_5c8afb3149_o.png) no-repeat left center;">Listened to <a href="' + link + '" target="_blank">' + title + '</a>';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
+					});
+
+					sss.LASTFM_FINISHED = 1;
+				} else {
+					console.log('SoSoSocial ERROR: LastFM feed seems to be down.');
+					sss.LASTFM_FINISHED = 1;
+				}
 				
-				sss.LASTFM_FINISHED = 1;
 				
 			});
 		
@@ -100,23 +112,29 @@ sss.COUNT = 0;
 		if (sss.FACEBOOK_RSS != '') {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.FACEBOOK_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
-				$(d.query.results.rss.channel.item).each(function() {
-					//if set up to be infinite or the limit is not reached, keep grabbing items
-					var title = this.title;
-					var link = this.link;
-					var description = this.description;
-					var pubDate = this.pubDate;
-					pubDate = pubDate.replace(/\,/g,'');
-					
-					//append to the div
-					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4022/4494661487_35b0167583_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a>';
-					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
-					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
-					sss.COUNT++;
-				});
+				if (d.query.results.rss) {
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4022/4494661487_35b0167583_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a>';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
+					});
+
+					sss.FACEBOOK_FINISHED = 1;
+				} else {
+					console.log('SoSoSocial ERROR: Facebook feed seems to be down.');
+					sss.FACEBOOK_FINISHED = 1;
+				}
 				
-				sss.FACEBOOK_FINISHED = 1;
 				
 			});
 		} else {
@@ -127,26 +145,32 @@ sss.COUNT = 0;
 		if (sss.FLICKR_RSS != '') {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.FLICKR_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
-				$(d.query.results.rss.channel.item).each(function() {
-					//if set up to be infinite or the limit is not reached, keep grabbing items
-					var title = this.title;
-					var link = this.link;
-					var description = this.description;
-					var pubDate = this.pubDate;
-					pubDate = pubDate.replace(/\,/g,'');
-					title = title.toString();
-					title = title.split(",");
-					title = title[0];
-					
-					//append to the div
-					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm3.static.flickr.com/2727/4494661413_0228be5f32_o.png) no-repeat left center;">Uploaded <a href="' + link + '" target="_blank">' + title + '</a>';
-					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
-					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
-					sss.COUNT++;
-				});
+				if (d.query.results.rss) {
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+						title = title.toString();
+						title = title.split(",");
+						title = title[0];
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm3.static.flickr.com/2727/4494661413_0228be5f32_o.png) no-repeat left center;">Uploaded <a href="' + link + '" target="_blank">' + title + '</a>';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
+					});
+
+					sss.FLICKR_FINISHED = 1;
+				} else {
+					console.log('SoSoSocial ERROR: Flickr feed seems to be down.');
+					sss.FLICKR_FINISHED = 1;
+				}
 				
-				sss.FLICKR_FINISHED = 1;
 				
 			});
 		} else {
@@ -157,23 +181,29 @@ sss.COUNT = 0;
 		if (sss.DELICIOUS_RSS != '') {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.DELICIOUS_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
-				$(d.query.results.rss.channel.item).each(function() {
-					//if set up to be infinite or the limit is not reached, keep grabbing items
-					var title = this.title;
-					var link = this.link;
-					var description = this.description;
-					var pubDate = this.pubDate;
-					pubDate = pubDate.replace(/\,/g,'');
-					
-					//append to the div
-					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4064/4495300640_2a7cbbb922_o.png) no-repeat left center;">Saved <a href="' + link + '" target="_blank">' + title + '</a>.';
-					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
-					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
-					sss.COUNT++;
-				});
+				if (d.query.results.rss) {
+					$(d.query.results.rss.channel.item).each(function() {
+						//if set up to be infinite or the limit is not reached, keep grabbing items
+						var title = this.title;
+						var link = this.link;
+						var description = this.description;
+						var pubDate = this.pubDate;
+						pubDate = pubDate.replace(/\,/g,'');
+
+						//append to the div
+						sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
+						sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4064/4495300640_2a7cbbb922_o.png) no-repeat left center;">Saved <a href="' + link + '" target="_blank">' + title + '</a>.';
+						sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
+						sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
+						sss.COUNT++;
+					});
+
+					sss.DELICIOUS_FINISHED = 1;
+				} else {
+					console.log('SoSoSocial ERROR: Delicious feed seems to be down.');
+					sss.DELICIOUS_FINISHED = 1;
+				}
 				
-				sss.DELICIOUS_FINISHED = 1;
 				
 			});
 		} else {
@@ -190,6 +220,12 @@ sss.COUNT = 0;
 		if (sss.TUMBLR_RSS != '') {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.TUMBLR_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
+				if (d.query.results.rss) {
+					
+				} else {
+					console.log('SoSoSocial ERROR: Facebook feed seems to be down.');
+					sss.FACEBOOK_FINISHED = 1;
+				}
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
 					var title = this.title;
@@ -224,6 +260,12 @@ sss.COUNT = 0;
 		if (sss.WORDPRESS_RSS != '') {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22"+encodeURIComponent(sss.WORDPRESS_RSS)+"%22&format=json&callback=?", function(d) {
 				//grab ever rss item from the json result request
+				if (d.query.results.rss) {
+					
+				} else {
+					console.log('SoSoSocial ERROR: Facebook feed seems to be down.');
+					sss.FACEBOOK_FINISHED = 1;
+				}
 				$(d.query.results.rss.channel.item).each(function() {
 					//if set up to be infinite or the limit is not reached, keep grabbing items
 					var title = this.title;
@@ -234,7 +276,7 @@ sss.COUNT = 0;
 
 					//append to the div
 					sss.ACTIVITY_ARRAY[sss.COUNT] = new Array();
-					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Tumblr.';
+					sss.ACTIVITY_ARRAY[sss.COUNT][0] = '<li style="background: url(http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png) no-repeat left center;">Posted <a href="' + link + '" target="_blank">' + title + '</a> on Wordpress.';
 					sss.ACTIVITY_ARRAY[sss.COUNT][1] = relative_time(pubDate);
 					sss.ACTIVITY_ARRAY[sss.COUNT][2] = get_delta(pubDate);
 					sss.COUNT++;

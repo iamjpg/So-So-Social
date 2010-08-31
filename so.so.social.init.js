@@ -40,7 +40,7 @@ sss.TUMBLR_RSS = '';
 sss.WORDPRESS_RSS = '';
 
 // How many to display.  Recommend no more than 25 since RSS only goes back so far.  0 = show all.
-sss.LIMIT = 10;
+sss.LIMIT = 5;
 
 
 
