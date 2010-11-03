@@ -367,7 +367,7 @@ function get_delta(time_value) {
 	time_value = values[2] + " " + values[1] + ", " + values[3] + " " + values[4];
 	var parsed_date = Date.parse(time_value);
 	var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
-	var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+	var delta = parseInt((relative_to.getTime() - parsed_date) / 1000, 10);
 	if (values[5] == "+0000") {
 		delta = delta + (relative_to.getTimezoneOffset() * 60);
 	} else {
@@ -388,20 +388,20 @@ function relative_time(time_value) {
 	} else if(delta < 120) {
 		return 'about a minute ago';
 	} else if(delta < (60*60)) {
-		return (parseInt(delta / 60)).toString() + ' minutes ago';
+		return (parseInt(delta / 60, 10)).toString() + ' minutes ago';
 	} else if(delta < (120*60)) {
 		return 'about an hour ago';
 	} else if(delta < (24*60*60)) {
-		return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+		return 'about ' + (parseInt(delta / 3600, 10)).toString() + ' hours ago';
 	} else if(delta < (48*60*60)) {
 		return '1 day ago';
 	} else {
-		return (parseInt(delta / 86400)).toString() + ' days ago';
+		return (parseInt(delta / 86400, 10)).toString() + ' days ago';
 	}
 }
 
 // Multi-Dementional Array sort.
 function by(i,dir) {
-	return function(a,b){a = a[i];b = b[i];return a == b ? 0 : (a < b ? -1*dir : dir)}
+	return function(a,b){a = a[i];b = b[i];return a == b ? 0 : (a < b ? -1*dir : dir);};
 }
 
