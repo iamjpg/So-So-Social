@@ -404,4 +404,3 @@ function relative_time(time_value) {
 function by(i,dir) {
 	return function(a,b){a = a[i];b = b[i];return a == b ? 0 : (a < b ? -1*dir : dir);};
 }
-
