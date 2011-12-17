@@ -7,11 +7,22 @@
 	<title>jQuery News Feed</title>
 	<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="so.so.social.feed.compressed.js" type="text/javascript" charset="utf-8"></script>
-	<script src="so.so.social.init.js" type="text/javascript" charset="utf-8"></script>
+	<script src="so.so.social.feed.js" type="text/javascript" charset="utf-8"></script>
 	<script>
+		/* var feeds = [
+			"http://svn.johnpatrickgiven.com/feed/"
+		]; */
+		var feeds = [
+			"http://twitter.com/statuses/user_timeline/35092196.rss",
+			"http://feeds.delicious.com/v2/rss/jgiven?count=15",
+			"http://api.flickr.com/services/feeds/photos_public.gne?id=25902523@N08&lang=en-us&format=rss_200",
+			"http://iamjpg.posterous.com/rss.xml",
+			"http://svn.johnpatrickgiven.com/feed/"
+		];
 		$(document).ready(function() {
-			$("#activityFeed").soSoSocial();
+			$("#activityFeed").soSoSocial({
+				feeds : feeds
+			});
 		});
 	</script>
 </head>

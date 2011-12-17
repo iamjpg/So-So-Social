@@ -16,7 +16,7 @@
 sss.TWITTER_RSS = 'http://twitter.com/statuses/user_timeline/35092196.rss';
 
 // LastFM RSS.
-sss.LASTFM_RSS = '';
+sss.LASTFM_RSS = 'http://ws.audioscrobbler.com/1.0/user/jgiven/recenttracks.rss';
 
 // Facebook RSS.
 // How do you get it?  It's annoying but here's how.
@@ -28,10 +28,10 @@ sss.LASTFM_RSS = '';
 sss.FACEBOOK_RSS = '';
 
 // Flickr RSS.
-sss.FLICKR_RSS = '';
+sss.FLICKR_RSS = 'http://api.flickr.com/services/feeds/photos_public.gne?id=25902523@N08&lang=en-us&format=rss_200';
 
 // Delicious RSS.
-sss.DELICIOUS_RSS = '';
+sss.DELICIOUS_RSS = 'http://feeds.delicious.com/v2/rss/jgiven?count=15';
 
 //Tumblr RSS.
 sss.TUMBLR_RSS = '';
@@ -40,10 +40,10 @@ sss.TUMBLR_RSS = '';
 sss.WORDPRESS_RSS = '';
 
 //Posterous RSS.
-sss.POSTEROUS_RSS = '';
+sss.POSTEROUS_RSS = 'http://iamjpg.posterous.com/rss.xml';
 
 // How many to display.  Recommend no more than 25 since RSS only goes back so far.  0 = show all.
-sss.LIMIT = 5;
+sss.LIMIT = 0;
 
 
 
