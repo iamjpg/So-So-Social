@@ -1,3 +1,10 @@
+/******************************************************
+	* jQuery plug-in
+	* So So Social Activity Feed
+	* Developed by J.P. Given (http://johnpatrickgiven.com)
+	* Useage: anyone so long as credit is left alone
+******************************************************/
+
 // Icons via Buddycon Icon Set by Webdesigner Depot & Orman Clark http://www.webdesignerdepot.com and www.ormanclark.com
 
 ;(function ( $, window, document ) {
@@ -21,6 +28,7 @@
 		bgPosterous: 'https://s3.amazonaws.com/sososocial/posterous_32.png',
 		bgVimeo: 'https://s3.amazonaws.com/sososocial/vimeo_32.png',
 		bgYouTube: 'https://s3.amazonaws.com/sososocial/youtube_32.png',
+		bgDribbble: 'https://s3.amazonaws.com/sososocial/dribbble_32.png',
 		bgDefault: 'https://s3.amazonaws.com/sososocial/rss_32.png'
 	};
 
@@ -76,9 +84,10 @@
 								(o.link.indexOf("flickr.com") > -1) || 
 								(o.link.indexOf("tumblr.com") > -1) ||
 								(res.query.results.rss.channel.generator != undefined && res.query.results.rss.channel.generator.indexOf('wordpress') > -1) ||
-								(o.commentRss != undefined && o.commentRss.indexOf("delicious.com") > -1)) { desc = 'Posted <a href="' + o.link + '" target="_blank">' + desc  + '</a>'}
-							if (res.query.results.rss.channel.link != undefined && res.query.results.rss.channel.link.indexOf('github') > -1) { desc = desc  + ' <a href="' + o.link + '">on Github</a>'}
-
+								(o.commentRss != undefined && o.commentRss.indexOf("delicious.com") > -1)) { desc = 'Posted <a href="' + o.link + '" target="_blank">' + desc  + '</a>';}
+							if (res.query.results.rss.channel.link != undefined && res.query.results.rss.channel.link.indexOf('github') > -1) { desc = desc  + ' <a href="' + o.link + '">on Github</a>';}
+							if (o.link.indexOf("dribbble.com") > -1) { desc = 'Shot <a href="' + o.link + '">' + desc + '</a> over at Dribble'; }
+							
 							// Figure out the background icon
 							var bg = obj.options.bgDefault;
 							if (o.link.indexOf("twitter.com") > -1) { bg = obj.options.bgTwitter; }
@@ -86,6 +95,7 @@
 							if (o.link.indexOf("flickr.com") > -1) { bg = obj.options.bgFlickr; }
 							if (o.link.indexOf("posterous.com") > -1) { bg = obj.options.bgPosterous; }
 							if (o.link.indexOf("tumblr.com") > -1) { bg = obj.options.bgTumblr; }
+							if (o.link.indexOf("dribbble.com") > -1) { bg = obj.options.bgDribbble; }
 							if (res.query.results.rss.channel.generator != undefined && res.query.results.rss.channel.generator.indexOf('wordpress') > -1) { bg = obj.options.bgWordPress }
 							if (res.query.results.rss.channel.link != undefined && res.query.results.rss.channel.link.indexOf('github') > -1) { bg = obj.options.bgGithub }
 							if (o.description != undefined && o.description.indexOf("last.fm") > -1) { bg = obj.options.bgLastFm; }
