@@ -1,17 +1,27 @@
+// Icons via Buddycon Icon Set by Webdesigner Depot & Orman Clark http://www.webdesignerdepot.com and www.ormanclark.com
+
 ;(function ( $, window, document ) {
     
 	var pluginName = 'soSoSocial',
 	obj = null,
 	defaults = {
-		propertyName: "value",
-		bgTwitter: 'http://farm5.static.flickr.com/4057/4494661441_c03e3fe766_o.png',
-		bgLastFm: 'http://farm5.static.flickr.com/4007/4495300744_5c8afb3149_o.png',
-		bgFacebook: 'http://farm5.static.flickr.com/4022/4494661487_35b0167583_o.png',
-		bgFlickr: 'http://farm3.static.flickr.com/2727/4494661413_0228be5f32_o.png',
-		bgDelicious: 'http://farm5.static.flickr.com/4064/4495300640_2a7cbbb922_o.png',
-		bgTumblr: 'http://farm5.static.flickr.com/4022/4494661551_3d68321873_o.png',
-		bgWordPress: 'http://farm5.static.flickr.com/4060/4495300842_3f39a6b514_o.png',
-		bgPosterous: 'http://farm5.static.flickr.com/4152/4946030629_65fece60f2_o.png'
+		limit: 25,
+		bgTwitter: 'https://s3.amazonaws.com/sososocial/twitter_32.png',
+		bgLastFm: 'https://s3.amazonaws.com/sososocial/lastfm_32.png',
+		bgFacebook: 'https://s3.amazonaws.com/sososocial/facebook_32.png',
+		bgFlickr: 'https://s3.amazonaws.com/sososocial/flickr_32.png',
+		bgDelicious: 'https://s3.amazonaws.com/sososocial/delicious_32.png',
+		bgGithub: 'https://s3.amazonaws.com/sososocial/github_32.png',
+		bgDigg: 'https://s3.amazonaws.com/sososocial/digg_32.png',
+		bgLinkedIn: 'https://s3.amazonaws.com/sososocial/linkedin_32.png',
+		bgTumblr: 'https://s3.amazonaws.com/sososocial/tumblr_32.png',
+		bgReddit: 'https://s3.amazonaws.com/sososocial/reddit_32.png',
+		bgStumbleUpon: 'https://s3.amazonaws.com/sososocial/stumbleupon_32.png',
+		bgWordPress: 'https://s3.amazonaws.com/sososocial/wordpress_32.png',
+		bgPosterous: 'https://s3.amazonaws.com/sososocial/posterous_32.png',
+		bgVimeo: 'https://s3.amazonaws.com/sososocial/vimeo_32.png',
+		bgYouTube: 'https://s3.amazonaws.com/sososocial/youtube_32.png',
+		bgDefault: 'https://s3.amazonaws.com/sososocial/rss_32.png'
 	};
 
 	function Plugin( element, options ) {
@@ -31,39 +41,69 @@
 
     Plugin.prototype.init = function () {
 		jQuery.each(this.options.feeds, function(i,o) {
+			// If atom then try to convert it
+			if (o.indexOf("atom") > -1) {
+				o = 'http://atom2rss.semiologic.com/?atom=' + o;
+			}
+			
 			$.jsonp({
 				url: 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22' + encodeURIComponent(o) + '%22&format=json&callback=?',
 				success: function(res) {
 					// console.log(res.query.results.rss.channel.item);
 					
-					jQuery.each(res.query.results.rss.channel.item, function(i, o) {
-						// console.log(o);
-						
-						var desc = (
-							(o.commentRss != undefined && o.commentRss.indexOf('feeds.delicious.com') > -1) || 
-							(o.link != undefined && o.link.indexOf('posterous.com'))) 
-							? o.title : o.description;
+					if (res.query.results != null) {
+						jQuery.each(res.query.results.rss.channel.item, function(i, o) {
+							// console.log(o);
+
+							var desc = (
+								(o.commentRss != undefined && o.commentRss.indexOf('feeds.delicious.com') > -1) || 
+								(o.link != undefined && o.link.indexOf('posterous.com'))) 
+								? o.title : o.description;
+
+							// If the description is an array (flickr!) then grab the zero element
+							if ($.isArray(desc)) { desc = desc[0]; }
+
+							// For twitter, dynamically make all URLs clickable
+							desc = desc.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
+								return '<a href="'+url+'">'+url+'</a>';
+							}).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
+								return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+							});
 							
-						if ($.isArray(desc)) { desc = desc[0]; }
-						
-						// Figure out the background icon
-						var bg = obj.options.bgWordPress;
-						if (o.link.indexOf("twitter.com") > -1) { bg = obj.options.bgTwitter; }
-						if (o.commentRss != undefined && o.commentRss.indexOf("delicious.com") > -1) { bg = obj.options.bgDelicious; }
-						if (o.link.indexOf("flickr.com") > -1) { bg = obj.options.bgFlickr; }
-						if (o.link.indexOf("posterous.com") > -1) { bg = obj.options.bgPosterous; }
-						if (o.link.indexOf("tumblr.com") > -1) { bg = obj.options.bgTumblr; }
-						
-						var html = '<li style="background: url(' + bg + ') no-repeat left center;">' + desc + '<br />Posted: ' + obj.relative_time(o.pubDate.replace(/\,/g,'')) + '</li>';
-						obj.contentArray[obj.contentCount] = new Array();
-						obj.contentArray[obj.contentCount][0] = html;
-						obj.contentArray[obj.contentCount][1] = obj.relative_time(o.pubDate.replace(/\,/g,''));
-						obj.contentArray[obj.contentCount][2] = obj.get_delta(o.pubDate.replace(/\,/g,''));
-						obj.contentCount ++;
-					});
+							// Maybe a little humanization of the line item
+							if (o.link.indexOf("twitter.com") > -1) { desc = '@' + desc; desc = desc.replace(/\B@([_a-z0-9]+):/ig, ""); }
+							if ((o.link.indexOf("posterous.com") > -1) || 
+								(o.link.indexOf("flickr.com") > -1) || 
+								(o.link.indexOf("tumblr.com") > -1) ||
+								(res.query.results.rss.channel.generator != undefined && res.query.results.rss.channel.generator.indexOf('wordpress') > -1) ||
+								(o.commentRss != undefined && o.commentRss.indexOf("delicious.com") > -1)) { desc = 'Posted <a href="' + o.link + '" target="_blank">' + desc  + '</a>'}
+							if (res.query.results.rss.channel.link != undefined && res.query.results.rss.channel.link.indexOf('github') > -1) { desc = desc  + ' <a href="' + o.link + '">on Github</a>'}
+
+							// Figure out the background icon
+							var bg = obj.options.bgDefault;
+							if (o.link.indexOf("twitter.com") > -1) { bg = obj.options.bgTwitter; }
+							if (o.commentRss != undefined && o.commentRss.indexOf("delicious.com") > -1) { bg = obj.options.bgDelicious; }
+							if (o.link.indexOf("flickr.com") > -1) { bg = obj.options.bgFlickr; }
+							if (o.link.indexOf("posterous.com") > -1) { bg = obj.options.bgPosterous; }
+							if (o.link.indexOf("tumblr.com") > -1) { bg = obj.options.bgTumblr; }
+							if (res.query.results.rss.channel.generator != undefined && res.query.results.rss.channel.generator.indexOf('wordpress') > -1) { bg = obj.options.bgWordPress }
+							if (res.query.results.rss.channel.link != undefined && res.query.results.rss.channel.link.indexOf('github') > -1) { bg = obj.options.bgGithub }
+							if (o.description != undefined && o.description.indexOf("last.fm") > -1) { bg = obj.options.bgLastFm; }
+
+							var html = '<li style="background: url(' + bg + ') no-repeat left center;">' + desc + '<br />Posted: ' + obj.relative_time(o.pubDate.replace(/\,/g,'')) + ' (<a href="' + o.link + '">#</a>)</li>';
+							obj.contentArray[obj.contentCount] = new Array();
+							obj.contentArray[obj.contentCount][0] = html;
+							obj.contentArray[obj.contentCount][1] = obj.relative_time(o.pubDate.replace(/\,/g,''));
+							obj.contentArray[obj.contentCount][2] = obj.get_delta(o.pubDate.replace(/\,/g,''));
+							obj.contentCount ++;
+						});
+					}
 					
 					// Array simply to compare length against to know to print feed.
 					obj.arrayCheck.push(i);
+				},
+				error: function() {
+					
 				}
 			});
 		});
@@ -81,18 +121,20 @@
     };
 
 	Plugin.prototype.print = function() {
-		console.log('Print!');
-		/* console.log(obj.contentArray);
-		console.log('------- SORT --------');
-		console.log(obj.contentArray.sort(obj.by(2,1))); */
-		var printThis = obj.contentArray.sort(obj.by(2,1));
+		
+		if (obj.contentArray.length < obj.options.limit) {
+			alert('Sorry but you have set a limit (' + obj.options.limit + ') but didn\'t return that many items in your RSS feed.');
+			return false;
+		}
+		
+		var ths = obj.contentArray.sort(obj.by(2,1));
 		
 		// console.log(printThis[0]);
 		obj.html = '<ul>';
 		
-		jQuery.each(printThis, function(i,o) {
-			obj.html += o[0];
-		});
+		for (i=0; i < obj.options.limit; i++) {
+			obj.html += ths[i][0];
+		}
 		
 		obj.html += '</ul>';
 		$(obj.element).html(obj.html);

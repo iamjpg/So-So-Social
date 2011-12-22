@@ -10,18 +10,22 @@
 	<script src="so.so.social.feed.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		/* var feeds = [
-			"http://svn.johnpatrickgiven.com/feed/"
+			"http://www.delicious.com/v2/rss/jgiven",
 		]; */
 		var feeds = [
 			"http://twitter.com/statuses/user_timeline/35092196.rss",
-			"http://feeds.delicious.com/v2/rss/jgiven?count=15",
+			"http://www.delicious.com/v2/rss/jgiven",
 			"http://api.flickr.com/services/feeds/photos_public.gne?id=25902523@N08&lang=en-us&format=rss_200",
 			"http://iamjpg.posterous.com/rss.xml",
-			"http://svn.johnpatrickgiven.com/feed/"
+			"http://svn.johnpatrickgiven.com/feed/",
+			"http://github.com/iamjpg.atom",
+			"http://ws.audioscrobbler.com/2.0/user/jgiven/recenttracks.rss",
+			"http://iamjpg.tumblr.com/rss"
 		];
 		$(document).ready(function() {
 			$("#activityFeed").soSoSocial({
-				feeds : feeds
+				feeds : feeds,
+				limit : 25
 			});
 		});
 	</script>
